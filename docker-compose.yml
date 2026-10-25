@@ -1,0 +1,38 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: scamtrace-backend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      - APP_NAME=ScamTrace AI
+      - DATABASE_URL=sqlite:///./data/haki.db
+      - DATA_DIR=./data
+      - OLLAMA_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=gemma3:4b
+      - OLLAMA_TEXT_MODEL=gemma:2b
+      - PUBLIC_CHECKS_ENABLED=true
+      - CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+    volumes:
+      - scamtrace-data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: scamtrace-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - BACKEND_INTERNAL_URL=http://backend:8000
+    depends_on:
+      - backend
+
+volumes:
+  scamtrace-data:

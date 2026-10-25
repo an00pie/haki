@@ -1,0 +1,33 @@
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+extension/node_modules/
+.next/
+frontend/.next/
+extension/dist/
+*.tsbuildinfo
+
+# Local databases, uploads, and forensic evidence
+data/*
+!data/.gitkeep
+data/*.db
+data/evidence/*
+data/reports/*
+
+# OS & IDE
+.DS_Store
+Thumbs.db

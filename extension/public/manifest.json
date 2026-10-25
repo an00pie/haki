@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "haki — Seller safety",
+  "version": "0.2.0",
+  "description": "User-triggered, local-first checks for unfamiliar stores and public Instagram sellers.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:8000/*"
+  ],
+  "action": {
+    "default_title": "Inspect with haki",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}

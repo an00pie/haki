@@ -1,0 +1,6 @@
+const DB_NAME="haki-media";
+const STORE="uploads";
+function openDb():Promise<IDBDatabase>{return new Promise((resolve,reject)=>{const request=indexedDB.open(DB_NAME,1);request.onupgradeneeded=()=>request.result.createObjectStore(STORE);request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)})}
+export async function storeVideo(key:string,file:File):Promise<void>{const db=await openDb();await new Promise<void>((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).put(file,key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)});db.close()}
+export async function readVideo(key:string):Promise<File|null>{const db=await openDb();const value=await new Promise<File|null>((resolve,reject)=>{const request=db.transaction(STORE,"readonly").objectStore(STORE).get(key);request.onsuccess=()=>resolve(request.result||null);request.onerror=()=>reject(request.error)});db.close();return value}
+export async function removeVideo(key:string):Promise<void>{const db=await openDb();await new Promise<void>((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)});db.close()}
